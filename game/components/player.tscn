@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://bbr7rxshheuk1"]
+[gd_scene load_steps=20 format=3 uid="uid://bbr7rxshheuk1"]
 
 [ext_resource type="Texture2D" uid="uid://fvfld74t3506" path="res://assets/img/sheets.png" id="1_21b71"]
 [ext_resource type="Script" path="res://components/player.gd" id="1_o3cox"]
+[ext_resource type="AudioStream" uid="uid://dbgje6sp5hm8j" path="res://assets/sounds/explode.ogg" id="3_an4lp"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_q57wb"]
 emission_shape = 3
@@ -18,7 +19,7 @@ scale_min = 7.25
 scale_max = 20.75
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o4vtj"]
-size = Vector2(122, 122)
+size = Vector2(42, 122)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8ip10"]
 size = Vector2(146.5, 56.5)
@@ -31,6 +32,90 @@ size = Vector2(131, 130)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w7por"]
 size = Vector2(43, 44)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v6piw"]
+size = Vector2(109, 110)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ycpc1"]
+size = Vector2(110, 58)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0oejl"]
+size = Vector2(112, 82)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_akoso"]
+size = Vector2(90, 92)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2ldmy"]
+size = Vector2(32, 34)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_y1jwx"]
+lifetime_randomness = 1.0
+spread = 180.0
+initial_velocity_min = 166.66
+initial_velocity_max = 439.39
+gravity = Vector3(0, 0, 0)
+scale_max = 33.36
+
+[sub_resource type="Animation" id="Animation_d1cm3"]
+resource_name = "die"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("die_particles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"restart"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_soo1i"]
+resource_name = "RESET"
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("die_particles")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"values": []
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("die_particles:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5dwj8"]
+_data = {
+"RESET": SubResource("Animation_soo1i"),
+"die": SubResource("Animation_d1cm3")
+}
 
 [node name="player" type="CharacterBody2D" groups=["player"]]
 script = ExtResource("1_o3cox")
@@ -130,7 +215,6 @@ frame = 34
 metadata/_edit_lock_ = true
 
 [node name="mode0" type="CollisionShape2D" parent="."]
-visible = false
 position = Vector2(-2, -2)
 shape = SubResource("RectangleShape2D_o4vtj")
 
@@ -147,6 +231,7 @@ shape = SubResource("RectangleShape2D_ru5nw")
 disabled = true
 
 [node name="mode3" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0.5, -1)
 shape = SubResource("RectangleShape2D_ur0w2")
 disabled = true
@@ -158,8 +243,9 @@ shape = SubResource("RectangleShape2D_w7por")
 disabled = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
-offset = Vector2(0, -103)
 zoom = Vector2(0.38, 0.38)
+limit_top = -1700
+limit_bottom = 0
 
 [node name="suelo" type="RayCast2D" parent="."]
 target_position = Vector2(0, 67)
@@ -181,3 +267,60 @@ target_position = Vector2(63, 0)
 visible = false
 position = Vector2(0, 1)
 target_position = Vector2(63, 0)
+
+[node name="damagebox" type="Node2D" parent="."]
+
+[node name="damage_area" type="Area2D" parent="damagebox"]
+collision_layer = 2
+collision_mask = 2
+
+[node name="modo0" type="CollisionShape2D" parent="damagebox/damage_area"]
+visible = false
+position = Vector2(-1.5, -1)
+shape = SubResource("RectangleShape2D_v6piw")
+disabled = true
+
+[node name="modo1" type="CollisionShape2D" parent="damagebox/damage_area"]
+visible = false
+position = Vector2(2, 24)
+shape = SubResource("RectangleShape2D_ycpc1")
+disabled = true
+
+[node name="modo2" type="CollisionShape2D" parent="damagebox/damage_area"]
+visible = false
+position = Vector2(0, 11)
+shape = SubResource("RectangleShape2D_0oejl")
+disabled = true
+
+[node name="modo3" type="CollisionShape2D" parent="damagebox/damage_area"]
+visible = false
+shape = SubResource("RectangleShape2D_akoso")
+disabled = true
+
+[node name="modo4" type="CollisionShape2D" parent="damagebox/damage_area"]
+visible = false
+shape = SubResource("RectangleShape2D_2ldmy")
+disabled = true
+
+[node name="delay" type="Timer" parent="."]
+one_shot = true
+
+[node name="die_particles" type="GPUParticles2D" parent="." groups=["player"]]
+position = Vector2(2, 5)
+emitting = false
+amount = 235
+process_material = SubResource("ParticleProcessMaterial_y1jwx")
+one_shot = true
+speed_scale = 1.86
+explosiveness = 1.0
+
+[node name="die_ani" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_5dwj8")
+}
+
+[node name="explode" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_an4lp")
+
+[connection signal="body_entered" from="damagebox/damage_area" to="." method="_on_damage_area_body_entered"]
+[connection signal="timeout" from="delay" to="." method="_on_delay_timeout"]

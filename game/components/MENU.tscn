@@ -1,0 +1,177 @@
+[gd_scene load_steps=11 format=3 uid="uid://xh5qsfm6xiww"]
+
+[ext_resource type="Script" path="res://components/MENU.gd" id="1_bbob7"]
+[ext_resource type="Texture2D" uid="uid://dmrfbjyy4xevs" path="res://assets/img/bg_0.png" id="1_qedsa"]
+[ext_resource type="Texture2D" uid="uid://7gl8wq268eqd" path="res://assets/img/title.png" id="2_6f24p"]
+[ext_resource type="FontFile" uid="uid://cc4kvbgwy1fuq" path="res://assets/font/Silver.ttf" id="3_mbvts"]
+[ext_resource type="Texture2D" uid="uid://dxti1f0ricxch" path="res://assets/img/play.png" id="4_cxm6u"]
+[ext_resource type="AudioStream" uid="uid://dh7aaxubtb35r" path="res://assets/sounds/menu.mp3" id="6_yuood"]
+[ext_resource type="AudioStream" uid="uid://daeygmscnikb0" path="res://assets/sounds/play.ogg" id="7_cfvle"]
+
+[sub_resource type="Animation" id="Animation_31flo"]
+resource_name = "RESET"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Play:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.5, 0.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Play:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(481, 269)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ColorRect:color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ColorRect:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_fnf00"]
+resource_name = "play"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(1.4, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Play:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(0.375, 0.375), Vector2(0.538462, 0.538462), Vector2(0.5, 0.5)]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yk7gt"]
+_data = {
+"RESET": SubResource("Animation_31flo"),
+"play": SubResource("Animation_fnf00")
+}
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bbob7")
+
+[node name="Bg0" type="Sprite2D" parent="."]
+modulate = Color(0, 0.694118, 0.960784, 1)
+position = Vector2(585.5, 146.5)
+scale = Vector2(0.571777, 0.571777)
+texture = ExtResource("1_qedsa")
+
+[node name="Title" type="Sprite2D" parent="."]
+position = Vector2(569, 134)
+rotation = -1.57079
+scale = Vector2(0.581009, 0.581009)
+texture = ExtResource("2_6f24p")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 19.0
+offset_top = 584.0
+offset_right = 803.0
+offset_bottom = 668.0
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("3_mbvts")
+theme_override_font_sizes/font_size = 76
+text = "Geometry Dash in 24 hours by Frask"
+
+[node name="Play" type="TouchScreenButton" parent="."]
+position = Vector2(481, 269)
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("4_cxm6u")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_yk7gt")
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(0, 0, 0, 0)
+
+[node name="menu" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_yuood")
+autoplay = true
+
+[node name="play_sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_cfvle")
+
+[connection signal="pressed" from="Play" to="." method="_on_play_pressed"]

@@ -1,14 +1,10 @@
 extends CharacterBody2D
 
-enum MODES {
-	CUBO,
-	NAVE,
-	OVNI,
-	PINCHOS,
-	TRIANGULO
-}
+var MODES = Game.MODES
 
-@export var MODE: MODES = 0
+@export var INIT_MODE: Game.MODES = 0
+
+var MODE = INIT_MODE
 
 var gravity_orientation = 1
 
@@ -34,31 +30,55 @@ var gravity_mode1 = 9.81
 
 @onready var modesVisualNodes = [$imgs/mode0, $imgs/mode1, $imgs/mode2, $imgs/modo3, $imgs/modo4]
 @onready var modesCollisionNodes = [$mode0, $mode1, $mode2, $mode3, $mode4]
+@onready var modesCollisionNodesArea = [$damagebox/damage_area/modo0, $damagebox/damage_area/modo1, $damagebox/damage_area/modo2, $damagebox/damage_area/modo3, $damagebox/damage_area/modo4]
 
-func change_mode(mode):
+func change_mode(mode: int):
 	
 	for i in range(0, 5):
 		modesVisualNodes[i].visible = false
 		modesCollisionNodes[i].disabled = true
+		modesCollisionNodesArea[i].disabled = true
 		pass
-	modesVisualNodes[mode].visible = true
-	modesCollisionNodes[mode].disabled = false
+	if not mode == MODES.DIE:
+		modesVisualNodes[mode].visible = true
+		modesCollisionNodes[mode].disabled = false
+		modesCollisionNodesArea[mode].disabled = false
 	
 	MODE = mode
 	pass
 
+func die():
+	
+	$die_ani.play("die")
+	if MODE != Game.MODES.DIE:
+		$explode.play(0)
+	change_mode(MODES.DIE)
+	
+	
+	pass
+
 func _ready():
 	startPoint = position
-	change_mode(MODE)
+	change_mode(INIT_MODE)
+	$die_ani.play("RESET")
 
 func pin(obj: Node2D, obj2: Node2D):
 	obj.position = obj2.position
 	pass
 
+func restart():
+	$imgs.visible = true
+	position = startPoint
+	velocity = Vector2()
+	change_mode(INIT_MODE)
+	pincho_orientacion =1
+	
+	pass
+
 func _physics_process(delta):
 	if Input.is_action_just_pressed("restart"):
-		position = startPoint
-		
+		restart()
+	
 	match MODE:
 		0:
 			mode0(delta)
@@ -75,8 +95,12 @@ func _physics_process(delta):
 		4:
 			mode4(delta)
 			pass
+		5:
+			pass
 		
-	
+	if velocity.x == 0:
+		die()
+		pass
 	pass
 
 func mode0(delta):
@@ -89,12 +113,12 @@ func mode0(delta):
 			var coll_obj:Node2D = $suelo.get_collider()
 			
 			if coll_obj.is_in_group("solid"):
-				velocity.y += -jump
+				velocity.y = -jump 
 	
 	if not $suelo.is_colliding() and sueloTocado:
 		
 		#ImageMode0.rotation_degrees += velocity_rotate
-		ImageMode0.rotation += 5 * delta
+		ImageMode0.rotation += 6 * delta
 		pass
 	
 	if $suelo.is_colliding():
@@ -106,7 +130,12 @@ func mode0(delta):
 		
 	particlesMode0.emitting = $suelo.is_colliding()
 	
-	
+	if $techo.is_colliding():
+		var coll_obj:Node2D = $techo.get_collider()
+			
+		if coll_obj.is_in_group("solid"):
+			die()
+		pass
 	
 	move_and_slide()
 	
@@ -145,11 +174,11 @@ func mode2(delta):
 	
 	if Input.is_action_just_pressed("jump"):
 		
-		velocity.y = -jump
+		velocity.y = -jump*0.7
 	
-	
-	if velocity.y > 2000:
-		velocity.y = 2000
+	var limit = 1500
+	if velocity.y > limit:
+		velocity.y = limit
 	
 	
 	move_and_slide()
@@ -182,8 +211,10 @@ func mode3(delta):
 					pincho_orientacion = 1
 		
 	
-	velocity.y += gravity * pincho_orientacion
+	var limit = 2000
 	
+	velocity.y += gravity * 0.8 * pincho_orientacion
+	velocity.y = clamp(velocity.y, -limit, limit)
 	move_and_slide()
 	
 	pass
@@ -227,3 +258,39 @@ func mode4(delta):
 	
 	
 	pass
+
+func insert_jump(_jump: float):
+	
+	match MODE:
+		Game.MODES.CUBO:
+			velocity.y = -_jump
+			pass
+		Game.MODES.NAVE:
+			velocity.y = -_jump
+			pass
+		Game.MODES.OVNI:
+			velocity.y = -_jump
+			pass
+		Game.MODES.PINCHOS:
+			
+			velocity.y = -_jump * pincho_orientacion
+			pass
+		Game.MODES.TRIANGULO:
+			velocity.y = -_jump
+			pass
+		
+	pass
+
+func _on_damage_area_body_entered(body: Node2D):
+	
+	
+	if body.is_in_group("damage"):
+		die()
+		pass
+	pass # Replace with function body.
+
+
+func _on_delay_timeout():
+	print("reinicio")
+	restart()
+	pass # Replace with function body.

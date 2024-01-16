@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3 uid="uid://dbi3qoub57hsj"]
+
+[ext_resource type="FontFile" uid="uid://cc4kvbgwy1fuq" path="res://assets/font/Silver.ttf" id="1_ekict"]
+[ext_resource type="Texture2D" uid="uid://cvkq0bdxckm4t" path="res://assets/img/kervy.jpg" id="2_0q1lq"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="ColorRect"]
+offset_left = 122.0
+offset_top = 122.0
+offset_right = 1030.0
+offset_bottom = 467.0
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("1_ekict")
+theme_override_font_sizes/font_size = 76
+text = "Comunmente aqui pondria una pantalla de
+que haz ganado pero ya era mucha chamba
+y mucho sueño por lo que aqui tienes un
+kirvy:"
+
+[node name="Kervy" type="Sprite2D" parent="."]
+position = Vector2(411, 492)
+texture = ExtResource("2_0q1lq")
