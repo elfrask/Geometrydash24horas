@@ -145,7 +145,7 @@ func mode0(delta):
 func mode1(delta):
 	var limits = 2500
 	
-	var force = -80
+	var force = -60
 	velocity.x = speed
 	
 	
@@ -155,7 +155,7 @@ func mode1(delta):
 	
 	velocity.y = clamp(velocity.y + force, -limits, limits) * gravity_orientation
 	
-	var torotation = (velocity.y / 3000) # * gravity_orientation
+	var torotation = (velocity.y / limits) # * gravity_orientation
 	
 	$imgs/mode1.rotation_degrees = torotation * 60
 	$imgs/mode1.scale.y = gravity_orientation
@@ -168,13 +168,13 @@ func mode1(delta):
 func mode2(delta):
 	
 	velocity.x = speed
-	velocity.y += gravity * 0.8
+	velocity.y += gravity * 0.6
 	
 	
 	
 	if Input.is_action_just_pressed("jump"):
 		
-		velocity.y = -jump*0.7
+		velocity.y = -jump*0.5
 	
 	var limit = 1500
 	if velocity.y > limit:

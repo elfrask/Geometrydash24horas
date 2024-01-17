@@ -11,13 +11,17 @@ config_version=5
 [application]
 
 config/name="GeometryDash24Horas"
-run/main_scene="res://Levels/uniquelevel.tscn"
+run/main_scene="res://components/MENU.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
 Game="*res://scripts/game.gd"
+
+[display]
+
+window/stretch/mode="canvas_items"
 
 [input]
 
@@ -43,4 +47,5 @@ pointing/emulate_touch_from_mouse=true
 textures/canvas_textures/default_texture_filter=3
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
 2d/snap/snap_2d_vertices_to_pixel=true
